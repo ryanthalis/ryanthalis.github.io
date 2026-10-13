@@ -42,6 +42,12 @@ h1 em{text-shadow:0 0 38px rgba(227,25,55,.18)}
 .small-project.dark .tags li{color:#ffb2bd;background:#271117}
 .experience-photo{box-shadow:0 12px 30px rgba(0,0,0,.28)}
 .experience-photo:hover{box-shadow:0 18px 38px rgba(227,25,55,.16)}
+.timeline{max-width:980px}
+.timeline-item{position:relative;grid-template-columns:minmax(130px,.26fr) minmax(0,1fr);padding:2.25rem 1.4rem;transition:transform .22s ease,background .22s ease,border-color .22s ease}
+.timeline-item:hover{background:linear-gradient(90deg,rgba(227,25,55,.1),rgba(227,25,55,0) 78%);border-bottom-color:#583039;transform:translateX(5px)}
+.timeline-copy{max-width:720px}
+.timeline-item h3{font-size:1.55rem}
+.timeline-item.featured:before{left:-4px;box-shadow:0 0 0 6px rgba(227,25,55,.12)}
 .principle-grid p{color:#c0bbc0}
 .contact{background:linear-gradient(135deg,#b30d29,#730718)}
 .contact .eyebrow{color:#ffd5dc}
