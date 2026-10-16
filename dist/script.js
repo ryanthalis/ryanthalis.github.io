@@ -1,6 +1,5 @@
-const systemPrefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const savedMotionPreference = localStorage.getItem('portfolio-motion');
-let fullMotionEnabled = savedMotionPreference === 'full' || (savedMotionPreference !== 'reduced' && !systemPrefersReducedMotion);
+let fullMotionEnabled = savedMotionPreference !== 'reduced';
 const motionToggle = document.querySelector('.motion-toggle');
 const motionLabel = motionToggle?.querySelector('.motion-label');
 
