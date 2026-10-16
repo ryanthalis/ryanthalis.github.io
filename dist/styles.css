@@ -63,6 +63,7 @@ footer{color:#b7b3b8;background:#050506}
 /* Visual flair: atmospheric depth, purposeful motion, and tactile interactions */
 body{position:relative;overflow-x:hidden}
 body:before{content:"";position:fixed;z-index:20;inset:0;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+body:after{content:"";position:fixed;z-index:30;top:0;right:0;left:0;height:3px;pointer-events:none;background:linear-gradient(90deg,var(--blue),var(--mint));box-shadow:0 0 16px rgba(227,25,55,.72);transform:scaleX(var(--page-progress,0));transform-origin:left center;will-change:transform}
 
 .site-header{position:relative;z-index:10}
 nav a{position:relative}
@@ -160,6 +161,7 @@ body:before{mix-blend-mode:normal;transform:translateZ(0);will-change:transform}
 .js .reveal-left{transform:translate3d(-72px,0,0);clip-path:inset(0 16% 0 0)}
 .js .reveal-right{transform:translate3d(72px,0,0);clip-path:inset(0 0 0 16%)}
 .js .reveal.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1);clip-path:inset(0 0 0 0)}
+.js .reveal.scroll-controlled{transition:none!important}
 .js .project-card.reveal.is-visible:hover,.js .small-project.reveal.is-visible:hover{transform:translate3d(0,-7px,0)}
 .js .timeline-item.reveal.is-visible:hover{transform:translate3d(5px,0,0)}
 .js .principle-grid article.reveal.is-visible:hover{transform:translate3d(0,-5px,0)}
