@@ -18,7 +18,15 @@ if (!prefersReducedMotion) {
 
   revealTargets.forEach((element, index) => {
     element.classList.add('reveal');
-    element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
+    element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 110}ms`);
+
+    if (element.matches('.section-heading > div, .principles > div:first-child, .motto')) {
+      element.classList.add('reveal-left');
+    } else if (element.matches('.section-heading > p')) {
+      element.classList.add('reveal-right');
+    } else {
+      element.classList.add('reveal-up');
+    }
   });
 
   if ('IntersectionObserver' in window) {
@@ -28,7 +36,7 @@ if (!prefersReducedMotion) {
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -12%' });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8%' });
 
     revealTargets.forEach((element) => revealObserver.observe(element));
   } else {
