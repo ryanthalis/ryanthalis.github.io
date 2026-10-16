@@ -121,3 +121,43 @@ h1 em:after{content:"";position:absolute;right:.03em;bottom:-.08em;left:.03em;he
 
 @media(max-width:680px){.work-section:before,.experience-section:before,.principles:before{right:18px;top:2.6rem;font-size:9rem}.hero:before{inset:3rem -5rem}.project-card:hover,.small-project:hover{transform:translateY(-4px)}.timeline:before{left:0}.timeline-item:after{top:2.55rem}}
 @media(prefers-reduced-motion:reduce){.hero:before,.contact:after,.terminal-body>.bar i,.terminal-body>p:first-child:after,h1 em:after{animation:none!important}.terminal-body>.bar i,h1 em:after{transform:none}.js .reveal{opacity:1;transform:none;filter:none}.portrait-card:hover,.hero-aside:hover .hero-card,.project-card:hover,.small-project:hover,.project-card:hover .terminal,.principle-grid article:hover{transform:none}}
+
+/* Smooth-motion pass: keep interactions on the compositor and reveal content on entry */
+.hero{--spotlight-x:70vw;--spotlight-y:280px}
+.hero:after{inset:auto;top:0;left:0;width:560px;height:560px;background:radial-gradient(circle,rgba(227,25,55,.2),rgba(227,25,55,.055) 42%,transparent 72%);transform:translate3d(calc(var(--spotlight-x) - 50%),calc(var(--spotlight-y) - 50%),0);transition:transform .16s cubic-bezier(.16,1,.3,1);will-change:transform}
+.hero:before{animation:gridDriftSmooth 18s linear infinite;will-change:transform}
+body:before{mix-blend-mode:normal;transform:translateZ(0);will-change:transform}
+
+.button,.project-link,.text-link,.portrait-card,.hero-card,.project-card,.small-project,.terminal,.principle-grid article{backface-visibility:hidden;transform:translateZ(0);will-change:transform}
+.button{transition:transform .28s cubic-bezier(.16,1,.3,1),background-color .28s ease,border-color .28s ease}
+.button:before{width:280px;height:280px;transform:translate(-50%,-50%) scale(0);transition:transform .48s cubic-bezier(.16,1,.3,1);will-change:transform}
+.button:hover:before{width:280px;height:280px;transform:translate(-50%,-50%) scale(1)}
+.button:active:before{width:280px;height:280px;transform:translate(-50%,-50%) scale(1.12)}
+.button:hover{transform:translate3d(0,-2px,0)}
+.button:active{transform:translate3d(0,1px,0) scale(.98)}
+.resume-button{border-color:#5a2630;background:rgba(227,25,55,.055)}
+.resume-button:hover{border-color:var(--blue-dark);background:rgba(227,25,55,.11)}
+
+.project-link,.text-link{transition:transform .28s cubic-bezier(.16,1,.3,1),color .2s ease}
+.project-link:hover,.text-link:hover{transform:translate3d(4px,0,0)}
+.project-link:active,.text-link:active{transform:translate3d(2px,0,0) scale(.98)}
+.portrait-card{transition:transform .48s cubic-bezier(.16,1,.3,1)}
+.portrait-card:hover{transform:translate3d(0,-7px,0) rotate(0) scale(1.01);box-shadow:var(--shadow)}
+.hero-card{transition:transform .48s cubic-bezier(.16,1,.3,1),border-color .25s ease}
+.hero-aside:hover .hero-card{transform:translate3d(-4px,4px,0) rotate(-.5deg)}
+
+.project-card,.small-project{transition:transform .48s cubic-bezier(.16,1,.3,1),border-color .25s ease}
+.project-card:hover,.small-project:hover{transform:translate3d(0,-7px,0);border-color:#6b2733}
+.project-card:hover{box-shadow:var(--shadow)}
+.small-project:hover{box-shadow:none}
+.project-card:after,.small-project:after{transition:border-color .25s ease;box-shadow:none}
+.project-card:hover:after,.small-project:hover:after{box-shadow:none}
+.terminal,.project-card:hover .terminal{box-shadow:0 28px 50px rgba(0,0,0,.46),0 0 32px rgba(227,25,55,.08)}
+.terminal{transition:transform .52s cubic-bezier(.16,1,.3,1)}
+
+.js .reveal{opacity:0;filter:none;transform:translate3d(0,42px,0) scale(.985);transition:opacity .82s var(--reveal-delay) ease-out,transform .9s var(--reveal-delay) cubic-bezier(.16,1,.3,1);will-change:opacity,transform}
+.js .reveal.is-visible{opacity:1;transform:translate3d(0,0,0) scale(1)}
+
+@keyframes gridDriftSmooth{from{transform:perspective(700px) rotateX(56deg) translateY(4rem) translate3d(0,0,0)}to{transform:perspective(700px) rotateX(56deg) translateY(4rem) translate3d(52px,52px,0)}}
+@media(max-width:680px){.hero-actions{align-items:stretch}.hero-actions .button{flex:1 1 145px}.resume-button{flex-basis:100%!important}}
+@media(prefers-reduced-motion:reduce){.hero:after{transform:none}.button,.project-link,.text-link,.portrait-card,.hero-card,.project-card,.small-project,.terminal,.principle-grid article{will-change:auto}}
