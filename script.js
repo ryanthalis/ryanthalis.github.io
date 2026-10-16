@@ -71,22 +71,27 @@ motionToggle?.addEventListener('click', () => {
   }
 
   let scrollFrame;
+  let previousScrollY = window.scrollY;
+  let scrollDirection = 1;
 
   const updateScrollMotion = () => {
     const viewportHeight = window.innerHeight;
-    const revealStart = viewportHeight * 0.94;
-    const revealEnd = viewportHeight * 0.54;
-    const revealDistance = revealStart - revealEnd;
+    const currentScrollY = window.scrollY;
+    const scrollDelta = currentScrollY - previousScrollY;
+
+    if (Math.abs(scrollDelta) > 1) scrollDirection = scrollDelta > 0 ? 1 : -1;
+    previousScrollY = currentScrollY;
 
     scrollTargets.forEach((element) => {
-      if (element.dataset.revealComplete === 'true') return;
-
       const bounds = element.getBoundingClientRect();
       const stagger = Number(element.dataset.revealStagger || 0);
-      const rawProgress = (revealStart - bounds.top) / revealDistance;
+      const scrollingDown = scrollDirection > 0;
+      const revealStart = scrollingDown ? viewportHeight * 0.94 : viewportHeight * 0.06;
+      const revealEnd = scrollingDown ? viewportHeight * 0.54 : viewportHeight * 0.46;
+      const rawProgress = scrollingDown
+        ? (revealStart - bounds.top) / (revealStart - revealEnd)
+        : (bounds.bottom - revealStart) / (revealEnd - revealStart);
       const progress = Math.min(1, Math.max(0, (rawProgress - stagger) / (1 - stagger)));
-
-      if (progress <= 0) return;
 
       const remaining = 1 - progress;
       let x = 0;
@@ -103,29 +108,22 @@ motionToggle?.addEventListener('click', () => {
         x = 82 * remaining;
         clipPath = `inset(0 0 0 ${18 * remaining}%)`;
       } else {
-        y = 96 * remaining;
+        y = (scrollingDown ? 96 : -96) * remaining;
         scale = 0.95 + (0.05 * progress);
-        clipPath = `inset(0 0 ${25 * remaining}% 0 round 14px)`;
+        clipPath = scrollingDown
+          ? `inset(0 0 ${25 * remaining}% 0 round 14px)`
+          : `inset(${25 * remaining}% 0 0 0 round 14px)`;
       }
 
       element.style.opacity = progress.toFixed(3);
       element.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
       element.style.clipPath = clipPath;
 
-      if (progress >= 0.999) {
-        element.dataset.revealComplete = 'true';
-        element.classList.add('is-visible');
-        requestAnimationFrame(() => {
-          element.classList.remove('scroll-controlled');
-          element.style.removeProperty('opacity');
-          element.style.removeProperty('transform');
-          element.style.removeProperty('clip-path');
-        });
-      }
+      element.classList.toggle('is-visible', progress >= 0.999);
     });
 
     const scrollableHeight = document.documentElement.scrollHeight - viewportHeight;
-    const pageProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+    const pageProgress = scrollableHeight > 0 ? currentScrollY / scrollableHeight : 0;
     document.documentElement.style.setProperty('--page-progress', String(Math.min(1, Math.max(0, pageProgress))));
     scrollFrame = undefined;
   };
