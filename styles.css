@@ -178,5 +178,6 @@ body:before{mix-blend-mode:normal;transform:translateZ(0);will-change:transform}
 .js.motion-reduced .reveal{transform:none!important;clip-path:none!important;transition:opacity .38s linear!important}
 .js.motion-reduced .hero:before,.js.motion-reduced .contact:after{animation:none!important}
 .js.motion-reduced .hero:after{display:none}
+.js:not(.motion-reduced) .hero:after{display:block;transform:translate3d(calc(var(--spotlight-x) - 50%),calc(var(--spotlight-y) - 50%),0)!important}
 
 @media(max-width:680px){.motion-toggle{right:.65rem;bottom:.65rem}}
