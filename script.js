@@ -21,26 +21,44 @@ if (!prefersReducedMotion) {
     element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
   });
 
-  const revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.14, rootMargin: '0px 0px -40px' });
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -12%' });
 
-  revealTargets.forEach((element) => revealObserver.observe(element));
+    revealTargets.forEach((element) => revealObserver.observe(element));
+  } else {
+    revealTargets.forEach((element) => element.classList.add('is-visible'));
+  }
 
   const hero = document.querySelector('.hero');
 
   if (hero && window.matchMedia('(pointer: fine)').matches) {
+    let spotlightFrame;
+    let spotlightX = 0;
+    let spotlightY = 0;
+
     hero.addEventListener('pointermove', (event) => {
       const bounds = hero.getBoundingClientRect();
-      hero.style.setProperty('--spotlight-x', `${event.clientX - bounds.left}px`);
-      hero.style.setProperty('--spotlight-y', `${event.clientY - bounds.top}px`);
+      spotlightX = event.clientX - bounds.left;
+      spotlightY = event.clientY - bounds.top;
+
+      if (spotlightFrame) return;
+
+      spotlightFrame = requestAnimationFrame(() => {
+        hero.style.setProperty('--spotlight-x', `${spotlightX}px`);
+        hero.style.setProperty('--spotlight-y', `${spotlightY}px`);
+        spotlightFrame = undefined;
+      });
     });
 
     hero.addEventListener('pointerleave', () => {
+      if (spotlightFrame) cancelAnimationFrame(spotlightFrame);
+      spotlightFrame = undefined;
       hero.style.removeProperty('--spotlight-x');
       hero.style.removeProperty('--spotlight-y');
     });
