@@ -1,6 +1,24 @@
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const systemPrefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const savedMotionPreference = localStorage.getItem('portfolio-motion');
+let fullMotionEnabled = savedMotionPreference === 'full' || (savedMotionPreference !== 'reduced' && !systemPrefersReducedMotion);
+const motionToggle = document.querySelector('.motion-toggle');
+const motionLabel = motionToggle?.querySelector('.motion-label');
 
-if (!prefersReducedMotion) {
+const syncMotionControl = () => {
+  document.documentElement.classList.toggle('motion-reduced', !fullMotionEnabled);
+  motionToggle?.setAttribute('aria-pressed', String(fullMotionEnabled));
+  if (motionLabel) motionLabel.textContent = fullMotionEnabled ? 'Motion: full' : 'Motion: reduced';
+};
+
+syncMotionControl();
+
+motionToggle?.addEventListener('click', () => {
+  fullMotionEnabled = !fullMotionEnabled;
+  localStorage.setItem('portfolio-motion', fullMotionEnabled ? 'full' : 'reduced');
+  window.location.reload();
+});
+
+{
   const revealGroups = [
     '.hero-copy > *',
     '.hero-aside',
@@ -77,7 +95,9 @@ if (!prefersReducedMotion) {
       let scale = 1;
       let clipPath = 'inset(0 0 0 0)';
 
-      if (element.classList.contains('reveal-left')) {
+      if (!fullMotionEnabled) {
+        clipPath = 'inset(0 0 0 0)';
+      } else if (element.classList.contains('reveal-left')) {
         x = -82 * remaining;
         clipPath = `inset(0 ${18 * remaining}% 0 0)`;
       } else if (element.classList.contains('reveal-right')) {
@@ -122,7 +142,7 @@ if (!prefersReducedMotion) {
 
   const hero = document.querySelector('.hero');
 
-  if (hero && window.matchMedia('(pointer: fine)').matches) {
+  if (fullMotionEnabled && hero && window.matchMedia('(pointer: fine)').matches) {
     let spotlightFrame;
     let spotlightX = 0;
     let spotlightY = 0;
